@@ -1,0 +1,7 @@
+/.venv
+.env
+/Audio
+/temp
+Pipfile.lock
+app/__pycache__
+app/scripts/__pycache__

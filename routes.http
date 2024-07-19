@@ -1,0 +1,2 @@
+GET http://127.0.0.1:5000/get HTTP/1.1
+url: https://music.apple.com/br/album/please-please-please/1750307020?i=1750307080
