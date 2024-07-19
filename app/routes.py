@@ -8,6 +8,7 @@ from flask import request
 from enums import SongCodec
 from legacy_download import DownloaderSongLegacy
 from song import Song
+from r2_upload import R2Uploader
 
 token = os.getenv("MEDIA_USER_TOKEN")
 
@@ -45,6 +46,13 @@ def retAll(url):
 
     final_path = legacy.getFinalPath()
     legacy.downloader.moveToFinalPath(remuxed_path, final_path)
+    
+    r2 = R2Uploader()
+    if r2.check_if_file_exists('song.m4a'):
+      r2.delete_file('song.m4a')
+      print('Deleted file ✅')
+    r2.upload_file('Audio/song.m4a')
+    print('Uploaded file ✅')
 
     song = Song(song_info, cover_file)
     song_json = song.getDataFix()

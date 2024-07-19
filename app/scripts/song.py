@@ -12,6 +12,7 @@ class Song:
     self.name = data["attributes"].get("name")
     self.artistName = data["attributes"].get("artistName")
     self.duration = data["attributes"].get("durationInMillis")
+    self.cover_url = data["attributes"]["artwork"].get("url")
   
   def __getTs(self, ts: str) -> float:
     ts = ts.replace('s', '')
@@ -61,6 +62,7 @@ class Song:
     info["name"] = self.name
     info["artist"] = self.artistName
     info["duration"] = self.duration
+    info["coverUrl"] = self.cover_url
     
     songwriter = ttml.find_all('songwriter')
     if len(songwriter) > 0:
@@ -69,7 +71,6 @@ class Song:
       info["songwriter"] = ", ".join(songwriters)
       
     info["colors"] = self.__getColors(self.cover_file)
-    print(info["colors"])
     
     if self.data["attributes"]["artwork"].get("bgColor"):
       info["bgColor"] = self.__hexToRgb(self.data["attributes"]["artwork"]["bgColor"])
