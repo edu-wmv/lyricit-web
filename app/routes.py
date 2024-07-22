@@ -1,7 +1,9 @@
 import sys
+
+import flask
 from app import app
 
-sys.path.append('C:\\Users\\montz\\OneDrive\\Codes\\lyricfyIT-project\\lyricfyIT-server\\app\\scripts')
+sys.path.append('/Users/iconlab/Documents/edU/lyricit-web/app/scripts')
 
 import os
 from flask import request
@@ -16,10 +18,12 @@ token = os.getenv("MEDIA_USER_TOKEN")
 def hello_world():
   return 'Hello World!'
 
-@app.route("/get")
+@app.route("/get", methods=['GET'])
 def getAll():
   url = request.headers.get('url')
-  return retAll(url);
+  response = flask.jsonify(retAll(url))
+  response.headers.add('Access-Control-Allow-Origin', '*')
+  return response
 
 def retAll(url):
   try:

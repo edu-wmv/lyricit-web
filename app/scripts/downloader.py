@@ -29,7 +29,7 @@ class Downloader:
   def __setPaths(self):
     self.temp_path = Path('./temp')
     self.final_path = Path('./Audio')
-    self.ffmpeg_path = Path('C:/Users/montz/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-7.0-full_build/bin/ffmpeg.exe')
+    self.ffmpeg_path = shutil.which('ffmpeg')
 
   def __setSubprocessArgs(self):
     self.subprocess_aditional_args = {

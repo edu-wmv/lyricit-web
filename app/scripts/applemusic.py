@@ -78,13 +78,10 @@ class AppleMusicAPI:
         "language": self.language,
       }
     )
-    
-    print('response', response.json())
 
     try:
       response.raise_for_status()
       webPlayback = response.json().get("songList")
-      print("WebPlayback", webPlayback)
       print('Web Playback ✅')
       assert webPlayback
     except (

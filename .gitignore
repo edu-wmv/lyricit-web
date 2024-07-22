@@ -1,7 +1,8 @@
-/.venv
+.venv
+venv
 .env
-/Audio
-/temp
+Audio
+temp
 Pipfile.lock
 app/__pycache__
 app/scripts/__pycache__
