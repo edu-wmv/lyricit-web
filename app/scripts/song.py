@@ -8,11 +8,13 @@ class Song:
     
   def __setData(self, data: dict) -> None:
     self.data = data
+    self.id = data["id"]
     self.ttml = data["relationships"]["lyrics"]["data"][0]["attributes"].get("ttml")
     self.name = data["attributes"].get("name")
     self.artistName = data["attributes"].get("artistName")
     self.duration = data["attributes"].get("durationInMillis")
     self.cover_url = data["attributes"]["artwork"].get("url")
+    self.syllables = data["relationships"]["syllable-lyrics"]["data"][0]["attributes"].get("ttml")
   
   def __getTs(self, ts: str) -> float:
     ts = ts.replace('s', '')
@@ -50,6 +52,29 @@ class Song:
       cols.append(','.join(str(x) for x in col))
     
     return cols
+  
+  def getSyllableLyrics(self) -> dict:
+    ttml = BeautifulSoup(self.syllables, "html.parser")
+
+    syllables = {}
+    for line in ttml.find_all('p'):
+      key = "0" + "".join(filter(str.isdigit, str(line.get("itunes:key"))))
+      verse = []
+  
+      if "span" in str(line):
+        span = BeautifulSoup(str(line), 'html.parser')
+        for s in span.find_all("span", attrs={'begin': True, 'end': True}):
+          verse.append({
+            "beginTime": self.__getTs(str(s.get("begin"))), 
+            "beginTimeMs": self.__getMs(str(s.get("begin"))), 
+            "endTime": self.__getTs(str(s.get("end"))),
+            "endTimeMs": self.__getMs(str(s.get("end"))),
+            "text": s.text
+          })
+        syllables[int(key)] = verse
+        
+    print('Syllable Lyrics ✅')
+    return syllables
   
   def getDataFix(self) -> dict:
     ttml = BeautifulSoup(self.ttml, "html.parser")
@@ -107,6 +132,8 @@ class Song:
           
     info["lyrics"] = lyrics
     if timeSyncedLyrics: info["timeSyncedLyrics"] = timeSyncedLyrics
+    info["isSyllableLyrics"] = True if self.syllables else False
+    if self.syllables: info["syllableLyrics"] = self.getSyllableLyrics()
     
     print('Data Fix ✅')
     return info
